@@ -1,0 +1,27 @@
+#!/usr/bin/python
+
+from argparse import ArgumentParser
+import sys
+import subprocess
+
+def main():
+    global options, cmd
+
+    subprocess.call(cmd)
+
+if __name__ == "__main__":
+    # parse command line arguments ... I'd like to figure out how to get it so this does *all* of my arg parsing
+    parser = ArgumentParser()
+    parser.add_argument("-v", "--verbose", help="set verbose mode", action="store_true")
+    (options, cmd) = parser.parse_known_args()
+
+    if not cmd:
+        print "usage should go here"
+        sys.exit(1)
+
+    if (cmd[0] == '--'):
+        cmd = cmd[1:]
+        # ArgumentParser stuffs
+
+    main()
+
