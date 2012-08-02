@@ -39,7 +39,7 @@ basically, the difference between the following two command lines:
 
 	cronstash -L 'gelf://10.1.1.82' -t 60 -T 90 -l /tmp/cron.lock -s 60 /usr/bin/do_something.pl
 
-	splay 60 stash gelf://10.1.1.82 lock /tmp/cron.lock timeout 60 90 /usr/bin/do_something.pl
+	lock /tmp/cron.lock splay 60 stash gelf://10.1.1.82 timeout 60 90 /usr/bin/do_something.pl
 
 currently, I'm leaning toward a monolithic program, mostly because design-wise, there
 could be some difficulties with the timeout function not killing the right thing (you'd
