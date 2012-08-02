@@ -9,6 +9,7 @@ currently cronstash implements the following features:
 * timeouts
 
 	both soft (SIGTERM) and hard (SIGKILL) timeouts are supported
+
 * splay functionality
 
 
