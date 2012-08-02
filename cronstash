@@ -5,9 +5,14 @@ from argparse import ArgumentParser
 import sys
 import signal
 import subprocess
+import time
+import random
 
 def main():
     global options, cmd
+
+    if options.splay:
+        time.sleep(random.randint(0,options.splay))
 
     child = subprocess.Popen(cmd)
 
@@ -37,6 +42,7 @@ if __name__ == "__main__":
     parser.add_argument("-v", "--verbose", help="set verbose mode", action="store_true")
     parser.add_argument("-t", "--timeout", help="timeout for child process (SIGTERM)", type=int, dest="timeout")
     parser.add_argument("-T", "--hard-timeout", help="hard timeout for child process (SIGKILL)", type=int, dest="hardtimeout")
+    parser.add_argument("-s", "--splay", help="sleep randomly for up to SPLAY seconds before running job", type=int, dest="splay")
     (options, cmd) = parser.parse_known_args()
 
     if not cmd:

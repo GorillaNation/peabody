@@ -9,6 +9,7 @@ currently cronstash implements the following features:
 * timeouts
 
 	both soft (SIGTERM) and hard (SIGKILL) timeouts are supported
+* splay functionality
 
 
 on the roadmap we have:
@@ -19,7 +20,6 @@ on the roadmap we have:
 	additionally, with this, I'll probably have it able to use a number of
 	backends for the lock. like redis, file, mutex? whatev. some shit
 
-* splay functionality
 
 # why should I use it?
 
