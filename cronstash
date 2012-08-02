@@ -7,9 +7,22 @@ import signal
 import subprocess
 import time
 import random
+import lockfile
 
 def main():
     global options, cmd
+
+    lock = None
+    if options.lockfile:
+        lock = lockfile.FileLock(options.lockfile)
+        try:
+            lock.acquire(0)
+        except lockfile.AlreadyLocked:
+            # file is locked
+            sys.exit(1)
+        except lockfile.LockFailed:
+            # file couldn't be locked for some reason
+            sys.exit(2)
 
     if options.splay:
         time.sleep(random.randint(0,options.splay))
@@ -33,6 +46,10 @@ def main():
 
     child.wait()
 
+    # shouldn't need to, but for good measure
+    if lock:
+        lock.release()
+
     sys.exit(child.returncode)
 
 
@@ -43,6 +60,7 @@ if __name__ == "__main__":
     parser.add_argument("-t", "--timeout", help="timeout for child process (SIGTERM)", type=int, dest="timeout")
     parser.add_argument("-T", "--hard-timeout", help="hard timeout for child process (SIGKILL)", type=int, dest="hardtimeout")
     parser.add_argument("-s", "--splay", help="sleep randomly for up to SPLAY seconds before running job", type=int, dest="splay")
+    parser.add_argument("-l", "--lock-file", help="path to file to lock for concurrency protection", dest="lockfile")
     (options, cmd) = parser.parse_known_args()
 
     if not cmd:

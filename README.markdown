@@ -11,15 +11,16 @@ currently cronstash implements the following features:
 	both soft (SIGTERM) and hard (SIGKILL) timeouts are supported
 
 * splay functionality
-
+* concurrency protection with file based locking
 
 on the roadmap we have:
 
 * configurable output capture and redirection
-* concurrency protection 
 
 	additionally, with this, I'll probably have it able to use a number of
 	backends for the lock. like redis, file, mutex? whatev. some shit
+
+* configurable locking mechanisms (redis? memcache? etc? or just make it pluggable and you can roll your own?)
 
 
 # why should I use it?
