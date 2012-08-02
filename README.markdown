@@ -52,3 +52,10 @@ and making cron command lines a bit less crazy :)
 
 anywho, I'm off to get cracking on this. It really shouldn't be that difficult to implement most
 of this.
+
+# how do I use it?
+
+Currently, there's only one dependency, lockfile. You can install it however you would like,
+though ubuntu has a package for it (python-lockfile) if you're running ubuntu.
+
+FIXME: usage goes here
