@@ -1,18 +1,42 @@
 #!/usr/bin/python
+# test!
 
 from argparse import ArgumentParser
 import sys
+import signal
 import subprocess
 
 def main():
     global options, cmd
 
-    subprocess.call(cmd)
+    child = subprocess.Popen(cmd)
+
+    if options.timeout:
+        def soft_timeout(signum, frame):
+            child.terminate()
+
+            if options.hardtimeout:
+                def hard_timeout(signum, frame):
+                    child.kill()
+
+                signal.signal(signal.SIGALRM, hard_timeout)
+                # we've already been waiting softtimeout seconds
+                signal.alarm(options.hardtimeout - options.timeout)
+
+        signal.signal(signal.SIGALRM, soft_timeout)
+        signal.alarm(options.timeout)
+
+    child.wait()
+
+    sys.exit(child.returncode)
+
 
 if __name__ == "__main__":
     # parse command line arguments ... I'd like to figure out how to get it so this does *all* of my arg parsing
     parser = ArgumentParser()
     parser.add_argument("-v", "--verbose", help="set verbose mode", action="store_true")
+    parser.add_argument("-t", "--timeout", help="timeout for child process (SIGTERM)", type=int, dest="timeout")
+    parser.add_argument("-T", "--hard-timeout", help="hard timeout for child process (SIGKILL)", type=int, dest="hardtimeout")
     (options, cmd) = parser.parse_known_args()
 
     if not cmd:

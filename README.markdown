@@ -6,11 +6,13 @@ additional functionality.
 
 currently cronstash implements the following features:
 
-* none! hah!
+* timeouts
+
+	both soft (SIGTERM) and hard (SIGKILL) timeouts are supported
+
 
 on the roadmap we have:
 
-* configurable timeouts (SIGTERM and SIGKILL threshholds)
 * configurable output capture and redirection
 * concurrency protection 
 
