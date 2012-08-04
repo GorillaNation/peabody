@@ -1,5 +1,4 @@
 #!/usr/bin/python
-# test!
 
 from argparse import ArgumentParser
 import sys
@@ -69,7 +68,6 @@ if __name__ == "__main__":
 
     if (cmd[0] == '--'):
         cmd = cmd[1:]
-        # ArgumentParser stuffs
 
     main()
 
