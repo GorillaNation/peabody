@@ -7,7 +7,6 @@ import subprocess
 import time
 import random
 import lockfile
-import errno
 
 def main():
     global options, cmd
