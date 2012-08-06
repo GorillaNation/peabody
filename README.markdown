@@ -22,6 +22,16 @@ on the roadmap we have:
 
 * configurable locking mechanisms (redis? memcache? etc? or just make it pluggable and you can roll your own?)
 
+# what does it NOT do
+
+* environment munging
+
+	cronstash passes through its environment unmodified to the child process. If you want to
+	do any munging on the environment, use env(1)
+
+* wash your dishes
+
+	cronstash will not do your dishes. I'll accept any patch which does this, however.
 
 # why should I use it?
 
