@@ -7,6 +7,7 @@ import subprocess
 import time
 import random
 import lockfile
+import errno
 
 def main():
     global options, cmd
@@ -26,7 +27,10 @@ def main():
     if options.splay:
         time.sleep(random.randint(0,options.splay))
 
-    child = subprocess.Popen(cmd)
+    try:
+        child = subprocess.Popen(cmd)
+    except OSError as e:
+        sys.exit("Unable to launch child process: %s (Errno: %i)" % (e.strerror, e.errno))
 
     if options.timeout:
         def soft_timeout(signum, frame):
