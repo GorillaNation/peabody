@@ -69,3 +69,21 @@ Currently, there's only one dependency, lockfile. You can install it however you
 though ubuntu has a package for it (python-lockfile) if you're running ubuntu.
 
 FIXME: usage goes here
+
+# where can I learn more?
+
+* [cronstash on bitbucket][cronstashbb]
+* [cronstash.org][cronstashorg]
+* [@cronstash on twitter][cronstashtwitter]
+
+Currently, cronstash.org just redirects to the bitbucket project, but in the future
+there will probably be a crappy page there. I'll also accept patches for this :)
+
+Why bitbucket? I wanted this to be a 'private' project until I had something
+deliverable. bitbucket allows me to do this. I really do prefer github, however, 
+so I'll likely be moving it at some point. git is awesome because this is a pretty 
+trivial thing to do, other than the issue tracker and wiki and such.
+
+[cronstashtwitter]: http://twitter.com/cronstash "@cronstash"
+[cronstashorg]: http://cronstash.org "cronstash.org"
+[cronstashbb]: https://bitbucket.org/kitchen/cronstash "cronstash @ bitbucket"
