@@ -1,4 +1,7 @@
 # wtf is it?
+
+cronstash is cron's best friend™
+
 cronstash is a program designed to wrap around a cron job to provide
 additional functionality.
 
@@ -31,7 +34,7 @@ on the roadmap we have:
 
 * wash your dishes
 
-	cronstash will not do your dishes. I'll accept any patch which does this, however.
+	cronstash will not do your dishes. I'll accept any patch which implements this, however.
 
 # why should I use it?
 
@@ -59,6 +62,13 @@ come to mind as having potential conflicts, which could affect portability). Add
 having it be monolithic means I can have a -f option which will read in a config file making
 it easier to support more complicated options (conditional output redirection comes to mind)
 and making cron command lines a bit less crazy :)
+
+and really, the single-function binary could just either be wrappers around the monolithic
+binary, or, if I separated things out into libraries a bit better, could just be calls to those
+library functions. And the monolithic binary would be calls to those very same functions.
+
+My only worry with this approach is that there would still be a lot of duplicated work,
+spawning child processes, parsing arguments, etc. We shall see, though.
 
 anywho, I'm off to get cracking on this. It really shouldn't be that difficult to implement most
 of this.
