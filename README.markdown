@@ -82,5 +82,5 @@ FIXME: usage goes here
 
 # where can I learn more?
 
-* FIXME: link to peabody github page
+* bitbucket: https://bitbucket.org/kitchen/peabody
 
