@@ -1,10 +1,13 @@
 # wtf is it?
-cronstash is a program designed to wrap around a cron job to provide
+
+peabody is cron's best friend™
+
+peabody is a program designed to wrap around a cron job to provide
 additional functionality.
 
 # wtf does it do?
 
-currently cronstash implements the following features:
+currently peabody implements the following features:
 
 * timeouts
 
@@ -22,6 +25,16 @@ on the roadmap we have:
 
 * configurable locking mechanisms (redis? memcache? etc? or just make it pluggable and you can roll your own?)
 
+# what does it NOT do
+
+* environment munging
+
+	peabody passes through its environment unmodified to the child process. If you want to
+	do any munging on the environment, use env(1)
+
+* wash your dishes
+
+	peabody will not do your dishes. I'll accept any patch which implements this, however.
 
 # why should I use it?
 
@@ -37,7 +50,7 @@ its own thing and can be chained.
 
 basically, the difference between the following two command lines:
 
-	cronstash -L 'gelf://10.1.1.82' -t 60 -T 90 -l /tmp/cron.lock -s 60 /usr/bin/do_something.pl
+	peabody -L 'gelf://10.1.1.82' -t 60 -T 90 -l /tmp/cron.lock -s 60 /usr/bin/do_something.pl
 
 	lock /tmp/cron.lock splay 60 stash gelf://10.1.1.82 timeout 60 90 /usr/bin/do_something.pl
 
@@ -50,6 +63,13 @@ having it be monolithic means I can have a -f option which will read in a config
 it easier to support more complicated options (conditional output redirection comes to mind)
 and making cron command lines a bit less crazy :)
 
+and really, the single-function binary could just either be wrappers around the monolithic
+binary, or, if I separated things out into libraries a bit better, could just be calls to those
+library functions. And the monolithic binary would be calls to those very same functions.
+
+My only worry with this approach is that there would still be a lot of duplicated work,
+spawning child processes, parsing arguments, etc. We shall see, though.
+
 anywho, I'm off to get cracking on this. It really shouldn't be that difficult to implement most
 of this.
 
@@ -59,3 +79,8 @@ Currently, there's only one dependency, lockfile. You can install it however you
 though ubuntu has a package for it (python-lockfile) if you're running ubuntu.
 
 FIXME: usage goes here
+
+# where can I learn more?
+
+* bitbucket: https://bitbucket.org/kitchen/peabody
+
