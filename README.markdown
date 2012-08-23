@@ -1,13 +1,13 @@
 # wtf is it?
 
-cronstash is cron's best friend™
+peabody is cron's best friend™
 
-cronstash is a program designed to wrap around a cron job to provide
+peabody is a program designed to wrap around a cron job to provide
 additional functionality.
 
 # wtf does it do?
 
-currently cronstash implements the following features:
+currently peabody implements the following features:
 
 * timeouts
 
@@ -29,12 +29,12 @@ on the roadmap we have:
 
 * environment munging
 
-	cronstash passes through its environment unmodified to the child process. If you want to
+	peabody passes through its environment unmodified to the child process. If you want to
 	do any munging on the environment, use env(1)
 
 * wash your dishes
 
-	cronstash will not do your dishes. I'll accept any patch which implements this, however.
+	peabody will not do your dishes. I'll accept any patch which implements this, however.
 
 # why should I use it?
 
@@ -50,7 +50,7 @@ its own thing and can be chained.
 
 basically, the difference between the following two command lines:
 
-	cronstash -L 'gelf://10.1.1.82' -t 60 -T 90 -l /tmp/cron.lock -s 60 /usr/bin/do_something.pl
+	peabody -L 'gelf://10.1.1.82' -t 60 -T 90 -l /tmp/cron.lock -s 60 /usr/bin/do_something.pl
 
 	lock /tmp/cron.lock splay 60 stash gelf://10.1.1.82 timeout 60 90 /usr/bin/do_something.pl
 
@@ -82,18 +82,5 @@ FIXME: usage goes here
 
 # where can I learn more?
 
-* [cronstash on bitbucket][cronstashbb]
-* [cronstash.org][cronstashorg]
-* [@cronstash on twitter][cronstashtwitter]
+* FIXME: link to peabody github page
 
-Currently, cronstash.org just redirects to the bitbucket project, but in the future
-there will probably be a crappy page there. I'll also accept patches for this :)
-
-Why bitbucket? I wanted this to be a 'private' project until I had something
-deliverable. bitbucket allows me to do this. I really do prefer github, however, 
-so I'll likely be moving it at some point. git is awesome because this is a pretty 
-trivial thing to do, other than the issue tracker and wiki and such.
-
-[cronstashtwitter]: http://twitter.com/cronstash "@cronstash"
-[cronstashorg]: http://cronstash.org "cronstash.org"
-[cronstashbb]: https://bitbucket.org/kitchen/cronstash "cronstash @ bitbucket"
