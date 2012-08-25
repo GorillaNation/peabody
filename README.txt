@@ -102,3 +102,5 @@ Where can I learn more?
 
 -  bitbucket: https://bitbucket.org/kitchen/peabody
 
+
+.. vim: ft=rst:
