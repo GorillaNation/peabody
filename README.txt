@@ -100,7 +100,7 @@ difficult to implement most of this.
 Where can I learn more?
 =======================
 
--  bitbucket: https://bitbucket.org/kitchen/peabody
+-  github: https://github.com/GorillaNation/peabody
 
 
 .. vim: ft=rst:
