@@ -1,4 +1,4 @@
-class Plugin:
+class Plugin(object):
     pass
 
 class LockPlugin(Plugin):
@@ -11,3 +11,9 @@ class LockPlugin(Plugin):
 
     def release(self):
         raise NotImplementedError("This method was not implemented by the subclass")
+
+class LockAlreadyLockedException(Exception):
+    pass
+
+class LockTimeoutException(Exception):
+    pass
