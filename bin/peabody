@@ -8,7 +8,6 @@ import time
 import random
 import lockfile
 import select
-import StringIO
 import fcntl
 import os
 
@@ -31,7 +30,10 @@ def main():
         time.sleep(random.randint(0,options.splay))
 
     try:
+        # spawn the child process
         child = subprocess.Popen(cmd,stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+
+        # set non-blocking on the file descriptors
         fl = fcntl.fcntl(child.stdout, fcntl.F_GETFL)
         fcntl.fcntl(child.stdout, fcntl.F_SETFL, fl | os.O_NONBLOCK)
         fl = fcntl.fcntl(child.stderr, fcntl.F_GETFL)
@@ -66,15 +68,21 @@ def main():
             "fd": child.stdout
         }
     }
+
+
+    # read events from child, uses select()
     while fds:
         (reads, writes, rithmatics) = select.select(fds.keys(), [], [])
         for readfd in reads:
+            print "got something on {0}".format(readfd)
             buf = fds[readfd]["fd"].read(8192)
             fds[readfd]["buf"] += buf
             while True:
                 (line, partition, leftover) = fds[readfd]["buf"].partition("\n")
                 if partition:
                     print "{0}: {1}".format(fds[readfd]["label"], line)
+                    # callback goes here
+                    # fds[readfd]["callback"](line)
                     fds[readfd]["buf"] = leftover
                 else:
                     break
