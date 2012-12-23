@@ -7,7 +7,7 @@ setup(
     author_email='jeremy.kitchen@gorillanation.com',
     packages=['peabody'],
     scripts=['bin/peabody'],
-    url='https://bitbucket.org/kitchen/peabody',
+    url='https://github.com/gorillanation/peabody',
     license='LICENSE.txt',
     description='wrapper for cronjobs to provide timeouts, locking, and some other fun features',
     long_description=open('README.rst').read(),
