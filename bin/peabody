@@ -54,82 +54,33 @@ def main():
         signal.signal(signal.SIGALRM, soft_timeout)
         signal.alarm(options.timeout)
 
-    # this works, but it's REALLY fugly
     fds = {
         child.stderr.fileno(): {
             "label": "STDERR",
             "buf": "",
+            "fd": child.stderr,
         },
         child.stdout.fileno(): {
             "label": "STDOUT",
             "buf": "",
+            "fd": child.stdout
         }
     }
-    bufs = { "stderr": "", "stdout": "" }
-    print "stderr: {0}, stdout: {1}".format(child.stderr.fileno(), child.stdout.fileno())
-    while True:
-        print "top of loop"
+    while fds:
         (reads, writes, rithmatics) = select.select(fds.keys(), [], [])
         for readfd in reads:
-            fileno = readfd.fileno()
-            fds[fileno]["buf"] += readfd.read(8192)
-            print "got something on {0}".format(fileno)
+            buf = fds[readfd]["fd"].read(8192)
+            fds[readfd]["buf"] += buf
             while True:
-                (line, partition, leftover) = fds[fileno]["buf"].partition("\n")
+                (line, partition, leftover) = fds[readfd]["buf"].partition("\n")
                 if partition:
-                    print "{0}: {1}".format(fds[fileno]["label"], line)
-                    fds[fileno]["buf"] = leftover
+                    print "{0}: {1}".format(fds[readfd]["label"], line)
+                    fds[readfd]["buf"] = leftover
                 else:
                     break
-            if not line:
-                print fds[fileno]["buf"]
-                print "closing {0}".format(fileno)
-                del fds[fileno]
-
-
-
-
-
-
-
-
-            print "got something on {0}".format(readfd.fileno())
-            print "readfd: {0}".format(readfd)
-            bytes = readfd.read(8192)
-            if readfd.fileno() == child.stderr.fileno():
-                bufs["stderr"] += bytes
-                # chunk through the lines
-                while True:
-                    (line, partition, leftover) = bufs["stderr"].partition("\n")
-                    if partition:
-                        print "STDERR: {0}".format(line)
-                        bufs["stderr"] = leftover
-                    else: break
-                if not line:
-                    print bufs["stderr"]
-                    del fds["stderr"]
-                    del bufs["stderr"]
-            elif readfd.fileno() == child.stdout.fileno():
-                bufs["stdout"] += bytes
-                while True:
-                    (line, partition, leftover) = bufs["stdout"].partition("\n")
-                    if partition:
-                        print "STDOUT: {0}".format(line)
-                        bufs["stdout"] = leftover
-                    else:
-                        break
-                if not line:
-                    print bufs["stdout"]
-                    del fds["stdout"]
-                    del bufs["stdout"]
-            else:
-                print "dunno if I knew {9}".readfd
-
-            print "fds: {0}".format(fds)
-        if not fds:
-            print "breaking"
-            break
-
+            if not buf:
+                print "fd closed, baleeeeted"
+                del fds[readfd]
 
     child.wait()
 
