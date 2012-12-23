@@ -10,7 +10,7 @@ setup(
     url='https://bitbucket.org/kitchen/peabody',
     license='LICENSE.txt',
     description='wrapper for cronjobs to provide timeouts, locking, and some other fun features',
-    long_description=open('README.txt').read(),
+    long_description=open('README.rst').read(),
     install_requires=[
         "lockfile",
     ],

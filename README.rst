@@ -97,6 +97,37 @@ shall see, though.
 anywho, I'm off to get cracking on this. It really shouldn't be that
 difficult to implement most of this.
 
+Logstash output features
+========================
+
+I intend to have peabody read from stdout and stderr and write each line
+separately (and timestamped separately) to logstash.
+
+There will be several additional bits of metadata added:
+
+- job_id
+
+  This will be a unique ID added to every run of peabody. This is so you can
+  easily grab all of the output of the cronjob in one swoop.
+
+- channel
+
+  stderr/stdout. So you can grab the stderr or stdout or both or neither. Your
+  choice.
+
+- job_name
+
+  this will be an optional field added to the logstash event so you can easily
+  identify which of your jobs the output came from.
+
+- @source_path will be ... unsure. Because cron doesn't let us know where the
+  job is running from.
+
+- process_id
+
+  this will be the pid of peabody's child process, separate from job_id. Just
+  in case you have some other logs which might mention that pid.
+
 Where can I learn more?
 =======================
 
