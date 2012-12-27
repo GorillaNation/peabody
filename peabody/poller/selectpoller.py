@@ -1,9 +1,12 @@
-class Select(peabody.poller.Poller):
-    def loop():
+import select
+from peabody.poller import Poller
+
+class SelectPoller(Poller):
+    def loop(self):
         while self.fds:
+            foo = self.fds.keys()
             (reads, writes, rithmatics) = select.select(self.fds.keys(), [], [])
             for readfd in reads:
-                print "got something on {0}".format(readfd)
                 buf = self.fds[readfd]["fd"].read(8192)
                 self.fds[readfd]["buf"] += buf
                 while True:
@@ -15,5 +18,4 @@ class Select(peabody.poller.Poller):
                     else:
                         break
                 if not buf:
-                    print "fd closed, baleeeeted"
                     del self.fds[readfd]

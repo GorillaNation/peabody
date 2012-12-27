@@ -1,5 +1,3 @@
-import peabody.poller.select
-
 class Poller(object):
     def __init__(self, stdout, stderr, stdoutcallback, stderrcallback):
         self.fds = {
@@ -19,4 +17,5 @@ class Poller(object):
 
 def getPoller(stdout, stderr, stdoutcallback, stderrcallback):
     # TODO: add an epoll() poller
-    return peabody.poller.select.Select(stdout=stdout, stderr=stderr)
+    import peabody.poller.selectpoller
+    return peabody.poller.selectpoller.SelectPoller(stdout=stdout, stderr=stderr, stdoutcallback=stdoutcallback, stderrcallback=stderrcallback)

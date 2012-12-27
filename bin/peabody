@@ -10,6 +10,7 @@ import lockfile
 import select
 import fcntl
 import os
+import peabody.poller
 
 def main():
     global options, cmd
@@ -56,39 +57,14 @@ def main():
         signal.signal(signal.SIGALRM, soft_timeout)
         signal.alarm(options.timeout)
 
-    fds = {
-        child.stderr.fileno(): {
-            "label": "STDERR",
-            "buf": "",
-            "fd": child.stderr,
-        },
-        child.stdout.fileno(): {
-            "label": "STDOUT",
-            "buf": "",
-            "fd": child.stdout
-        }
-    }
+    def outcall(line):
+        print "STDOUTfoo : {0}".format(line)
 
+    def errcall(line):
+        print "STDERRfoo : {0}".format(line)
 
-    # read events from child, uses select()
-    while fds:
-        (reads, writes, rithmatics) = select.select(fds.keys(), [], [])
-        for readfd in reads:
-            print "got something on {0}".format(readfd)
-            buf = fds[readfd]["fd"].read(8192)
-            fds[readfd]["buf"] += buf
-            while True:
-                (line, partition, leftover) = fds[readfd]["buf"].partition("\n")
-                if partition:
-                    print "{0}: {1}".format(fds[readfd]["label"], line)
-                    # callback goes here
-                    # fds[readfd]["callback"](line)
-                    fds[readfd]["buf"] = leftover
-                else:
-                    break
-            if not buf:
-                print "fd closed, baleeeeted"
-                del fds[readfd]
+    # capture output
+    peabody.poller.getPoller(child.stdout, child.stderr, outcall, errcall).loop()
 
     child.wait()
 
