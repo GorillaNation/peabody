@@ -15,16 +15,17 @@ class LogstashRedis(peabody.output.Output):
         self.redis = redis.StrictRedis(host=redis_url.hostname, port=redis_url.port, db=re.sub(r'^/', '', redis_url.path))
 
         self.obj = {
-            '@fields': {
-                'peabody': {
-                    "run_id": options.cronjob_run_id,
-                    "child_pid": options.child_pid,
-                }
-            },
-            '@type':'peabody',
+            '@fields': options.logstash_parsed_fields,
+            '@type': options.logstash_type,
+            '@tags': options.logstash_parsed_tags,
             '@source_host': options.logstash_source_host,
             '@source_path': options.logstash_source_file,
             '@source': "file://{0}/{1}".format(options.logstash_source_host, options.logstash_source_file),
+        }
+
+        self.obj["@fields"]['peabody'] = {
+            "run_id": options.cronjob_run_id,
+            "child_pid": options.child_pid,
         }
 
         if options.cronjob_name:
