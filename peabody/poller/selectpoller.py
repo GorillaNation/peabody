@@ -18,4 +18,7 @@ class SelectPoller(Poller):
                     else:
                         break
                 if not buf:
+                    # EOF, but there might be something left in the buffer
+                    if self.fds[readfd]["buf"]:
+                        self.fds[readfd]["callback"](line)
                     del self.fds[readfd]
