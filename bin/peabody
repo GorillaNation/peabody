@@ -97,7 +97,7 @@ if __name__ == "__main__":
 
     # logstash stuffs
     parser.add_argument("--logstash-type", help="value for the @type field for logstash, defaults to 'cronjob'", default='cronjob')
-    parser.add_argument("--logstash-tags", help="tags to add to the logstash event", nargs="*", action="append", default=[])
+    parser.add_argument("--logstash-tags", help="tags to add to the logstash event", nargs="*", action="append", default=[], metavar="TAG")
     parser.add_argument("--logstash-fields", help="fields to add to the logstash event", nargs="*", action="append", default=[], metavar="field=value")
     parser.add_argument("--logstash-source-host", help="source host to tell to logstash, defaults to the machine's FQDN", default=socket.getfqdn())
     parser.add_argument("--logstash-source-file", help="source file to tell to logstash, defaults to 'cron_output'", default='cron_output')
