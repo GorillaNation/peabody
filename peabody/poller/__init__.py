@@ -12,9 +12,13 @@ class Poller(object):
                 "callback": stdoutcallback,
             }
         }
-    
-    pass
 
+    # do the loop and make the callbacks
+    # override this in subclasses
+    def loop():
+        pass
+
+# logics to figure out the best poller to use. falls back to select() poller
 def getPoller(stdout, stderr, stdoutcallback, stderrcallback):
     # TODO: add an epoll() poller
     import peabody.poller.selectpoller
