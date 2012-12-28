@@ -11,6 +11,7 @@ import select
 import fcntl
 import os
 import peabody.poller
+import peabody.output.logstash_redis
 
 def main():
     global options, cmd
@@ -57,14 +58,10 @@ def main():
         signal.signal(signal.SIGALRM, soft_timeout)
         signal.alarm(options.timeout)
 
-    def outcall(line):
-        print "STDOUTfoo : {0}".format(line)
-
-    def errcall(line):
-        print "STDERRfoo : {0}".format(line)
 
     # capture output
-    peabody.poller.getPoller(child.stdout, child.stderr, outcall, errcall).loop()
+    out = peabody.output.logstash_redis.LogstashRedis(None)
+    peabody.poller.getPoller(child.stdout, child.stderr, out.stdout, out.stderr).loop()
 
     child.wait()
 
