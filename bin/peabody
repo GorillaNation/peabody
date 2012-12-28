@@ -35,13 +35,15 @@ def main():
 
     try:
         # spawn the child process
-        child = subprocess.Popen(cmd,stderr=subprocess.PIPE, stdout=subprocess.PIPE)
-
-        # set non-blocking on the file descriptors
-        fl = fcntl.fcntl(child.stdout, fcntl.F_GETFL)
-        fcntl.fcntl(child.stdout, fcntl.F_SETFL, fl | os.O_NONBLOCK)
-        fl = fcntl.fcntl(child.stderr, fcntl.F_GETFL)
-        fcntl.fcntl(child.stderr, fcntl.F_SETFL, fl | os.O_NONBLOCK)
+        if options.output_capture:
+            child = subprocess.Popen(cmd,stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+            # set non-blocking on the file descriptors
+            fl = fcntl.fcntl(child.stdout, fcntl.F_GETFL)
+            fcntl.fcntl(child.stdout, fcntl.F_SETFL, fl | os.O_NONBLOCK)
+            fl = fcntl.fcntl(child.stderr, fcntl.F_GETFL)
+            fcntl.fcntl(child.stderr, fcntl.F_SETFL, fl | os.O_NONBLOCK)
+        else:
+            child = subprocess.Popen(cmd)
     except OSError as e:
         sys.exit("Unable to launch child process: %s (Errno: %i)" % (e.strerror, e.errno))
 
@@ -63,8 +65,9 @@ def main():
     options.child_pid = child.pid
 
     # capture output
-    out = peabody.output.logstash_redis.LogstashRedis(options)
-    peabody.poller.getPoller(child.stdout, child.stderr, out.stdout, out.stderr).loop()
+    if options.output_capture == "logstash-redis":
+        out = peabody.output.logstash_redis.LogstashRedis(options)
+        peabody.poller.getPoller(child.stdout, child.stderr, out.stdout, out.stderr).loop()
 
     child.wait()
 
@@ -104,7 +107,6 @@ if __name__ == "__main__":
     parser.add_argument("--logstash-redis-key", help="the redis key to put logstash events into, defaults to 'logstash'", default="logstash")
 
     (options, cmd) = parser.parse_known_args()
-    print "DEBUG: options: {0}, cmd: {1}".format(options, cmd)
 
     # parse out fields
     options.logstash_parsed_fields = {}
