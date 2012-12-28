@@ -12,6 +12,8 @@ import fcntl
 import os
 import peabody.poller
 import peabody.output.logstash_redis
+import socket
+import uuid
 
 def main():
     global options, cmd
@@ -58,9 +60,10 @@ def main():
         signal.signal(signal.SIGALRM, soft_timeout)
         signal.alarm(options.timeout)
 
+    options.child_pid = child.pid
 
     # capture output
-    out = peabody.output.logstash_redis.LogstashRedis(None)
+    out = peabody.output.logstash_redis.LogstashRedis(options)
     peabody.poller.getPoller(child.stdout, child.stderr, out.stdout, out.stderr).loop()
 
     child.wait()
@@ -80,7 +83,41 @@ if __name__ == "__main__":
     parser.add_argument("-T", "--hard-timeout", help="hard timeout for child process (SIGKILL)", type=int, dest="hardtimeout")
     parser.add_argument("-s", "--splay", help="sleep randomly for up to SPLAY seconds before running job", type=int, dest="splay")
     parser.add_argument("-l", "--lock-file", help="path to file to lock for concurrency protection", dest="lockfile")
+
+    # multiple output plugins might want this
+    parser.add_argument("--cronjob-name", help="name for this cronjob, check output plugin to see how it will be used", default=None)
+    parser.add_argument("--cronjob-run-id", help="unique (or not) ID for this cronjob's run. defaults to uuid.uuid4().hex", default=uuid.uuid4().hex)
+
+
+    # output capture
+    parser.add_argument("-O", "--output-capture", help="where to capture output to, defaults to not capturing, valid values are 'logstash-redis'", default=None)
+
+    # logstash stuffs
+    parser.add_argument("--logstash-type", help="value for the @type field for logstash, defaults to 'cronjob'", default='cronjob')
+    parser.add_argument("--logstash-tags", help="tags to add to the logstash event", nargs="*", action="append", default=[])
+    parser.add_argument("--logstash-fields", help="fields to add to the logstash event", nargs="*", action="append", default=[], metavar="field=value")
+    parser.add_argument("--logstash-source-host", help="source host to tell to logstash, defaults to the machine's FQDN", default=socket.getfqdn())
+    parser.add_argument("--logstash-source-file", help="source file to tell to logstash, defaults to 'cron_output'", default='cron_output')
+
+    # logstash redis stuffs
+    parser.add_argument("--logstash-redis-url", help="the url for the redis server to use to put output into logstash, defaults to redis://localhost:6379/0", default="redis://localhost:6379/0")
+    parser.add_argument("--logstash-redis-key", help="the redis key to put logstash events into, defaults to 'logstash'", default="logstash")
+
     (options, cmd) = parser.parse_known_args()
+    print "DEBUG: options: {0}, cmd: {1}".format(options, cmd)
+
+    # parse out fields
+    options.logstash_parsed_fields = {}
+    for fieldargs in options.logstash_fields:
+        for fullfield in fieldargs:
+            a,_,b = fullfield.partition("=")
+            options.logstash_parsed_fields[a] = b
+
+    # flatten tags array
+    options.logstash_parsed_tags = []
+    for tagargs in options.logstash_tags:
+        for tag in tagargs:
+            options.logstash_parsed_tags.append(tag)
 
     if not cmd:
         print "usage should go here"
