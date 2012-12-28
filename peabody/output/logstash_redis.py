@@ -13,7 +13,7 @@ class LogstashRedis(Output):
 
         self.obj = {
             '@fields': {
-                    'peabody:job_id': uuid.uuid4().hex,
+                    'peabody_job_id': uuid.uuid4().hex,
             },
             '@type':'peabody',
             '@source_host':socket.getfqdn(),
@@ -27,14 +27,11 @@ class LogstashRedis(Output):
     def stdout(self, line):
         self.obj["@timestamp"] = datetime.utcnow().isoformat('T') + 'Z'
         self.obj["@message"] = line
-        self.obj["@fields"]["peabody:output"] = "stdout"
+        self.obj["@fields"]["peabody_output"] = "stdout"
         self.redis.rpush(self.redis_key, json.dumps(self.obj))
 
     def stderr(self, line):
         self.obj["@timestamp"] = datetime.utcnow().isoformat('T') + 'Z'
         self.obj["@message"] = line
-        self.obj["@fields"]["peabody:output"] = "stderr"
+        self.obj["@fields"]["peabody_output"] = "stderr"
         self.redis.rpush(self.redis_key, json.dumps(self.obj))
-
-
-
