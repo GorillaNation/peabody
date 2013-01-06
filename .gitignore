@@ -2,3 +2,4 @@ MANIFEST
 dist/
 build/
 *.pyc
+peabody.egg-info
