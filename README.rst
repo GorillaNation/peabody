@@ -18,13 +18,12 @@ currently peabody implements the following features:
 
 -  splay functionality
 -  concurrency protection with file based locking
+-  logstash redis output
+
+   push stdout and stderr from the child process into logstash's redis input as
+   json_events, one per line
 
 on the roadmap we have:
-
--  configurable output capture and redirection
-
-   additionally, with this, I'll probably have it able to use a number
-   of backends for the lock. like redis, file, mutex? whatev. something
 
 -  configurable locking mechanisms (redis? memcache? etc? or just make
    it pluggable and you can roll your own?)
