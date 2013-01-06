@@ -18,13 +18,12 @@ currently peabody implements the following features:
 
 -  splay functionality
 -  concurrency protection with file based locking
+-  logstash redis output
+
+   push stdout and stderr from the child process into logstash's redis input as
+   json_events, one per line
 
 on the roadmap we have:
-
--  configurable output capture and redirection
-
-   additionally, with this, I'll probably have it able to use a number
-   of backends for the lock. like redis, file, mutex? whatev. something
 
 -  configurable locking mechanisms (redis? memcache? etc? or just make
    it pluggable and you can roll your own?)
@@ -97,10 +96,41 @@ shall see, though.
 anywho, I'm off to get cracking on this. It really shouldn't be that
 difficult to implement most of this.
 
+Logstash output features
+========================
+
+I intend to have peabody read from stdout and stderr and write each line
+separately (and timestamped separately) to logstash.
+
+There will be several additional bits of metadata added:
+
+- job_id
+
+  This will be a unique ID added to every run of peabody. This is so you can
+  easily grab all of the output of the cronjob in one swoop.
+
+- channel
+
+  stderr/stdout. So you can grab the stderr or stdout or both or neither. Your
+  choice.
+
+- job_name
+
+  this will be an optional field added to the logstash event so you can easily
+  identify which of your jobs the output came from.
+
+- @source_path will be ... unsure. Because cron doesn't let us know where the
+  job is running from.
+
+- process_id
+
+  this will be the pid of peabody's child process, separate from job_id. Just
+  in case you have some other logs which might mention that pid.
+
 Where can I learn more?
 =======================
 
--  bitbucket: https://bitbucket.org/kitchen/peabody
+-  github: https://github.com/GorillaNation/peabody
 
 
 .. vim: ft=rst:
