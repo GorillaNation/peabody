@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='peabody',
-    version='0.2.0',
+    version='0.2.1',
     author='Jeremy Kitchen',
     author_email='jeremy.kitchen@gorillanation.com',
     packages=['peabody'],
