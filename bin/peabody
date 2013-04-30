@@ -18,6 +18,9 @@ import uuid
 def main():
     global options, cmd
 
+    if options.pwd:
+        os.chdir(options.pwd)
+
     lock = None
     if options.lockfile:
         lock = lockfile.FileLock(options.lockfile)
@@ -86,6 +89,7 @@ if __name__ == "__main__":
     parser.add_argument("-T", "--hard-timeout", help="hard timeout for child process (SIGKILL)", type=int, dest="hardtimeout")
     parser.add_argument("-s", "--splay", help="sleep randomly for up to SPLAY seconds before running job", type=int, dest="splay")
     parser.add_argument("-l", "--lock-file", help="path to file to lock for concurrency protection", dest="lockfile")
+    parser.add_argument("-d", "--pwd", help="change to this directory prior to executing command")
 
     # multiple output plugins might want this
     parser.add_argument("--cronjob-name", help="name for this cronjob, check output plugin to see how it will be used", default=None)

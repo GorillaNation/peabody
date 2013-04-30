@@ -23,6 +23,8 @@ currently peabody implements the following features:
    push stdout and stderr from the child process into logstash's redis input as
    json_events, one per line
 
+-  change PWD prior to executing command
+
 on the roadmap we have:
 
 -  configurable locking mechanisms (redis? memcache? etc? or just make

@@ -1,2 +1,3 @@
+v0.2.2, 2013-04-30 -- change working directory support
 v0.2.1, 2013-01-05 -- logstash-redis output capture added
 v0.2.0, 2012-08-25 -- Initial pipification
