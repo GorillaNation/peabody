@@ -30,8 +30,8 @@ on the roadmap we have:
 -  configurable locking mechanisms (redis? memcache? etc? or just make
    it pluggable and you can roll your own?)
 
-What does it NOT do
-===================
+What does it NOT do?
+====================
 
 -  environment munging
 
